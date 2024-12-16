@@ -18,13 +18,16 @@ document
 
     // Wysyłanie danych do backendu
     try {
-      const response = await fetch("http://pracownicy.vercel.app/employees", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, lastName }),
-      });
+      const response = await fetch(
+        "http://https://pracownicy-raports-projects-47cfe79b.vercel.app/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, lastName }),
+        }
+      );
 
       const data = await response.json();
       messageElement.textContent = data.message || "Pracownik został dodany!";
