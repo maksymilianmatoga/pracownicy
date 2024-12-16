@@ -18,7 +18,7 @@ document
 
     // Wysyłanie danych do backendu
     try {
-      const response = await fetch("http://pracownicy.vercel.app/", {
+      const response = await fetch("http://pracownicy.vercel.app/employees", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
