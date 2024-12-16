@@ -1,0 +1,78 @@
+/* Stylizacja podstawowa */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column; /* Etykieta nad polem */
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+}
+
+input:focus {
+  border-color: #5f9ea0;
+}
+
+button {
+  padding: 10px;
+  background-color: #5f9ea0;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #4e8a7f;
+}
+
+#message {
+  text-align: center;
+  color: green;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+input::placeholder {
+  color: #bbb;
+}

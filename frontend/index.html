@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pracownicy</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Łączenie pliku CSS -->
+  </head>
+  <body>
+    <div class="App">
+      <h1>Dodaj pracownika</h1>
+      <form id="employeeForm">
+        <div class="input-group">
+          <label for="name">Imię:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Wpisz imię"
+          />
+        </div>
+        <div class="input-group">
+          <label for="lastName">Nazwisko:</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+            placeholder="Wpisz nazwisko"
+          />
+        </div>
+        <button type="submit">Dodaj</button>
+      </form>
+
+      <p id="message"></p>
+      <!-- Komunikat o stanie -->
+    </div>
+
+    <script src="app.js"></script>
+    <!-- Łączenie pliku JavaScript -->
+  </body>
+</html>
