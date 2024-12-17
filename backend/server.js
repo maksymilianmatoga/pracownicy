@@ -6,39 +6,40 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-// Inicjalizacja aplikacji Express
 const app = express();
-const port = process.env.PORT || 5000; // Używamy zmiennej środowiskowej dla portu na Heroku lub domyślnego 5000
+const port = process.env.PORT || 5000;
 
-// Middleware
+// Middleware do obsługi CORS
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*", // Ustawiamy URL frontendu z zmiennej środowiskowej, domyślnie pozwalamy na dostęp z dowolnej domeny
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Określamy metody, które będą dozwolone
-    allowedHeaders: ["Content-Type", "Authorization"], // Określamy, jakie nagłówki będą dozwolone
+    origin: "*", // Możesz zmienić "*" na domenę frontendową (np. "https://maksymilianmatoga.github.io")
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Zezwalaj na te metody
+    allowedHeaders: ["Content-Type", "Authorization"], // Zezwalaj na te nagłówki
   })
 );
-app.use(bodyParser.json()); // Middleware do parsowania JSON w żądaniach
+
+// Middleware do parsowania JSON
+app.use(bodyParser.json());
 
 // Połączenie z MongoDB Atlas
-const uri = process.env.MONGO_URI; // Używamy zmiennej środowiskowej z połączeniem do MongoDB
+const uri = process.env.MONGO_URI;
 mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Połączono z MongoDB Atlas"))
   .catch((err) => console.error("Błąd połączenia z MongoDB:", err));
 
-// Definicja schematu dla pracowników
+// Schemat pracowników
 const EmployeeSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Imię
-  lastName: { type: String, required: true }, // Nazwisko
+  name: { type: String, required: true },
+  lastName: { type: String, required: true },
 });
 
-// Tworzymy model dla kolekcji "Pracownicy" w bazie "Raport"
+// Model pracowników
 const Employee = mongoose.model("Employee", EmployeeSchema, "Pracownicy");
 
 // Endpoint do dodawania pracowników
 app.post("/employees", (req, res) => {
-  const { name, lastName } = req.body; // Oczekujemy imienia i nazwiska
+  const { name, lastName } = req.body;
 
   if (!name || !lastName) {
     return res.status(400).send({ message: "Imię i nazwisko są wymagane" });
@@ -65,6 +66,17 @@ app.get("/employees", (req, res) => {
         .status(400)
         .send({ message: "Błąd przy pobieraniu pracowników: " + err })
     );
+});
+
+// Obsługa żądań preflight (OPTIONS)
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Lub ustaw domenę frontendową
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.status(200).send(); // Odpowiedź na preflight
 });
 
 // Uruchomienie serwera
