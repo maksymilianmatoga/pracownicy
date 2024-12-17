@@ -19,7 +19,7 @@ document
     // Wysyłanie danych do backendu
     try {
       const response = await fetch(
-        "http://https://pracownicy-raports-projects-47cfe79b.vercel.app/",
+        "https://pracownicy-raports-projects-47cfe79b.vercel.app/",
         {
           method: "POST",
           headers: {
