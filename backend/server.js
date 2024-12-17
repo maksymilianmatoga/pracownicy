@@ -8,14 +8,14 @@ const bodyParser = require("body-parser");
 
 // Inicjalizacja aplikacji Express
 const app = express();
-const port = process.env.PORT || 5000; // Używamy zmiennej środowiskowej dla portu na Heroku
+const port = process.env.PORT || 5000; // Używamy zmiennej środowiskowej dla portu na Heroku lub domyślnego 5000
 
 // Middleware
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, // Ustawiamy URL frontendu z zmiennej środowiskowej
-    methods: ["GET", "POST"], // Określamy metody, które będą dozwolone
-    allowedHeaders: ["Content-Type"], // Określamy, jakie nagłówki będą dozwolone
+    origin: process.env.FRONTEND_URL || "*", // Ustawiamy URL frontendu z zmiennej środowiskowej, domyślnie pozwalamy na dostęp z dowolnej domeny
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Określamy metody, które będą dozwolone
+    allowedHeaders: ["Content-Type", "Authorization"], // Określamy, jakie nagłówki będą dozwolone
   })
 );
 app.use(bodyParser.json()); // Middleware do parsowania JSON w żądaniach
@@ -53,6 +53,17 @@ app.post("/employees", (req, res) => {
       res
         .status(400)
         .send({ message: "Błąd przy dodawaniu pracownika: " + err })
+    );
+});
+
+// Endpoint do pobierania listy pracowników
+app.get("/employees", (req, res) => {
+  Employee.find()
+    .then((employees) => res.status(200).json(employees))
+    .catch((err) =>
+      res
+        .status(400)
+        .send({ message: "Błąd przy pobieraniu pracowników: " + err })
     );
 });
 
