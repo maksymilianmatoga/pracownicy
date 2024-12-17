@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000; // Używamy zmiennej środowiskowej dla p
 // Middleware
 app.use(
   cors({
-    origin: "*", // Ustawiamy URL frontendu z zmiennej środowiskowej, domyślnie pozwalamy na dostęp z dowolnej domeny
+    origin: process.env.FRONTEND_URL || "*", // Ustawiamy URL frontendu z zmiennej środowiskowej, domyślnie pozwalamy na dostęp z dowolnej domeny
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Określamy metody, które będą dozwolone
     allowedHeaders: ["Content-Type", "Authorization"], // Określamy, jakie nagłówki będą dozwolone
   })
