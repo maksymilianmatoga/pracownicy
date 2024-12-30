@@ -1,11 +1,9 @@
-// Załaduj zmienne środowiskowe z pliku .env
 require("dotenv").config();
-
 const express = require("express");
+const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,9 +11,9 @@ const port = process.env.PORT || 3000;
 // Middleware do obsługi CORS
 app.use(
   cors({
-    origin: "https://maksymilianmatoga.github.io", // Zamień "*" na dokładną domenę frontendową
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Zezwalaj na te metody
-    allowedHeaders: ["Content-Type", "Authorization"], // Zezwalaj na te nagłówki
+    origin: "https://maksymilianmatoga.github.io", // Twoja domena frontendowa
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -28,6 +26,9 @@ mongoose
   .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Połączono z MongoDB Atlas"))
   .catch((err) => console.error("Błąd połączenia z MongoDB:", err));
+
+// Serwowanie plików statycznych z folderu 'frontend'
+app.use(express.static(path.join(__dirname, "../frontend"))); // Używamy ../ w celu przejścia do folderu nadrzędnego, gdzie znajduje się folder 'frontend'
 
 // Schemat pracowników
 const EmployeeSchema = new mongoose.Schema({
@@ -42,8 +43,6 @@ const Employee = mongoose.model("Employee", EmployeeSchema, "Pracownicy");
 app.post("/employees", (req, res) => {
   const { name, lastName } = req.body;
 
-  console.log("Received POST request:", req.body); // Logowanie danych przychodzących
-
   if (!name || !lastName) {
     return res.status(400).send({ message: "Imię i nazwisko są wymagane" });
   }
@@ -52,42 +51,31 @@ app.post("/employees", (req, res) => {
 
   newEmployee
     .save()
-    .then(() => {
-      console.log("Employee added successfully");
-      res.status(201).send({ message: "Pracownik został dodany" });
-    })
-    .catch((err) => {
-      console.error("Error adding employee:", err);
+    .then(() => res.status(201).send({ message: "Pracownik został dodany" }))
+    .catch((err) =>
       res
         .status(400)
-        .send({ message: "Błąd przy dodawaniu pracownika: " + err });
-    });
+        .send({ message: "Błąd przy dodawaniu pracownika: " + err })
+    );
 });
 
 // Endpoint do pobierania listy pracowników
 app.get("/employees", (req, res) => {
-  console.log("Received GET request for employees"); // Logowanie zapytań GET
-
   Employee.find()
-    .then((employees) => {
-      console.log("Employees retrieved successfully");
-      res.status(200).json(employees);
-    })
-    .catch((err) => {
-      console.error("Error fetching employees:", err);
+    .then((employees) => res.status(200).json(employees))
+    .catch((err) =>
       res
         .status(400)
-        .send({ message: "Błąd przy pobieraniu pracowników: " + err });
-    });
+        .send({ message: "Błąd przy pobieraniu pracowników: " + err })
+    );
 });
 
 // Obsługa żądań preflight (OPTIONS)
 app.options("*", (req, res) => {
-  console.log("Handling OPTIONS request"); // Logowanie zapytań OPTIONS
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://maksymilianmatoga.github.io"
-  ); // Twoja domena frontendowa
+    "https://maksymilianmatoga.github.io" // Twoja domena frontendowa
+  );
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
@@ -95,9 +83,6 @@ app.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.status(200).send(); // Odpowiedź na preflight
 });
-
-// Serwowanie plików statycznych z folderu frontend
-app.use(express.static(path.join(__dirname, "frontend")));
 
 // Uruchomienie serwera
 app.listen(port, () => {
