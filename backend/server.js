@@ -41,6 +41,8 @@ const Employee = mongoose.model("Employee", EmployeeSchema, "Pracownicy");
 app.post("/employees", (req, res) => {
   const { name, lastName } = req.body;
 
+  console.log("Received POST request:", req.body); // Logowanie danych przychodzących
+
   if (!name || !lastName) {
     return res.status(400).send({ message: "Imię i nazwisko są wymagane" });
   }
@@ -49,27 +51,38 @@ app.post("/employees", (req, res) => {
 
   newEmployee
     .save()
-    .then(() => res.status(201).send({ message: "Pracownik został dodany" }))
-    .catch((err) =>
+    .then(() => {
+      console.log("Employee added successfully");
+      res.status(201).send({ message: "Pracownik został dodany" });
+    })
+    .catch((err) => {
+      console.error("Error adding employee:", err);
       res
         .status(400)
-        .send({ message: "Błąd przy dodawaniu pracownika: " + err })
-    );
+        .send({ message: "Błąd przy dodawaniu pracownika: " + err });
+    });
 });
 
 // Endpoint do pobierania listy pracowników
 app.get("/employees", (req, res) => {
+  console.log("Received GET request for employees"); // Logowanie zapytań GET
+
   Employee.find()
-    .then((employees) => res.status(200).json(employees))
-    .catch((err) =>
+    .then((employees) => {
+      console.log("Employees retrieved successfully");
+      res.status(200).json(employees);
+    })
+    .catch((err) => {
+      console.error("Error fetching employees:", err);
       res
         .status(400)
-        .send({ message: "Błąd przy pobieraniu pracowników: " + err })
-    );
+        .send({ message: "Błąd przy pobieraniu pracowników: " + err });
+    });
 });
 
 // Obsługa żądań preflight (OPTIONS)
 app.options("*", (req, res) => {
+  console.log("Handling OPTIONS request"); // Logowanie zapytań OPTIONS
   res.setHeader(
     "Access-Control-Allow-Origin",
     "https://maksymilianmatoga.github.io"
