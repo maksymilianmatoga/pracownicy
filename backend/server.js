@@ -14,6 +14,7 @@ app.use(
     origin: "https://maksymilianmatoga.github.io", // Twoja domena frontendowa
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Jeśli korzystasz z ciasteczek lub sesji
   })
 );
 
@@ -81,6 +82,7 @@ app.options("*", (req, res) => {
     "GET, POST, PUT, DELETE, OPTIONS"
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // Zezwalaj na ciasteczka
   res.status(200).send(); // Odpowiedź na preflight
 });
 
