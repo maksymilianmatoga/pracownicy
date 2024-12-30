@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 // Middleware do obsługi CORS
 app.use(
   cors({
-    origin: "*", // Możesz zmienić "*" na domenę frontendową (np. "https://maksymilianmatoga.github.io")
+    origin: "https://maksymilianmatoga.github.io", // Zamień "*" na dokładną domenę frontendową
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Zezwalaj na te metody
     allowedHeaders: ["Content-Type", "Authorization"], // Zezwalaj na te nagłówki
   })
@@ -70,7 +70,10 @@ app.get("/employees", (req, res) => {
 
 // Obsługa żądań preflight (OPTIONS)
 app.options("*", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Lub ustaw domenę frontendową
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://maksymilianmatoga.github.io"
+  ); // Twoja domena frontendowa
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
