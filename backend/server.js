@@ -5,6 +5,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -94,6 +95,9 @@ app.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.status(200).send(); // Odpowiedź na preflight
 });
+
+// Serwowanie plików statycznych z folderu frontend
+app.use(express.static(path.join(__dirname, "frontend")));
 
 // Uruchomienie serwera
 app.listen(port, () => {
